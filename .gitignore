@@ -1,0 +1,17 @@
+# Python / Jupyter
+__pycache__/
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# Databricks artifacts
+.databricks/
+*.dbc
+
+# Local data (raw copies)
+data/raw/*.csv
+
+# OS
+.DS_Store
+Thumbs.db
