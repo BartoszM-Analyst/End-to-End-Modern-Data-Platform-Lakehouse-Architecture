@@ -1,192 +1,153 @@
-<img width="1536" height="1024" alt="file_000000004200720a9898669b2bacda96" src="https://github.com/user-attachments/assets/cecc08da-3f3d-42f7-b240-0425f5d858d1" />
+# B2B Sales Analytics Platform — Databricks · Delta Lake · Power BI
 
-# 🚀 End-to-End Sales Analytics Platform  
-### From Raw Data to Executive Dashboard (Databricks + Delta Lake + Power BI)
+> **A company sitting on 12 months of raw sales exports had no reliable way to answer basic questions: Which products are actually profitable? What's the return rate by category? Who are the customers worth protecting?**  
+> This platform was built to change that.
 
----
-
-## 📌 Project Overview
-
-This project simulates a real-world enterprise scenario where a company lacks a centralized and standardized sales reporting system.
-
-Sales data was stored in raw CSV exports without:
-
-- unified KPI definitions  
-- structured data modeling  
-- return rate monitoring  
-- product performance analysis  
-- executive-level reporting  
-
-To address this, I designed and implemented a modern Medallion Architecture analytics platform using Databricks and Delta Lake, delivering business-ready KPIs to an interactive Power BI dashboard.
+![Databricks](https://img.shields.io/badge/Databricks-FF3621?style=flat-square&logo=databricks&logoColor=white)
+![Delta Lake](https://img.shields.io/badge/Delta_Lake-00ADD8?style=flat-square)
+![PySpark](https://img.shields.io/badge/PySpark-E25A1C?style=flat-square&logo=apachespark&logoColor=white)
+![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=flat-square&logo=powerbi&logoColor=black)
+![Architecture](https://img.shields.io/badge/Architecture-Medallion-blueviolet?style=flat-square)
 
 ---
 
-## 🎯 Business Objective
+## The Problem
 
-The goal was to build an end-to-end analytics solution that:
+The business had sales data. It just wasn't usable.
 
-- Centralizes raw sales data  
-- Standardizes KPI calculations  
-- Enables product and customer performance analysis  
-- Tracks return rates and margin risks  
-- Provides executive-level visibility through dashboards  
+Raw CSV exports, no standard KPI definitions, no return rate tracking, no way to slice performance by product category or customer tier. Every report was rebuilt from scratch each month. Every number was potentially wrong.
 
-This project reflects how a scalable data platform can support data-driven decision-making.
-
----
-
-## 🏗 Architecture
-
-The solution follows the Medallion Architecture (Bronze → Silver → Gold) pattern.
-
-Raw CSV Data  
-↓  
-Bronze Layer (Raw Ingestion - Delta Tables)  
-↓  
-Silver Layer (Data Cleaning, Joins, Transformations)  
-↓  
-Gold Layer (Business KPIs & Aggregations)  
-↓  
-Power BI Executive Dashboard  
-
-### 🔹 Bronze Layer
-- Raw data ingestion into Delta tables  
-- Schema enforcement  
-- Minimal transformations  
-- Source-of-truth storage  
-
-### 🔹 Silver Layer
-- Data cleaning and validation  
-- Business logic transformations  
-- Joining fact and dimension data  
-- Structured analytical model  
-
-### 🔹 Gold Layer
-- Business-ready aggregated tables  
-- KPI calculations  
-- Performance metrics  
-- Optimized datasets for BI consumption  
+The core gaps:
+- **No single source of truth** — different teams, different numbers
+- **No return rate visibility** — losses were invisible until they hit margin
+- **No product-level profitability** — revenue was tracked, margin wasn't
+- **No scalable reporting layer** — every insight required manual effort
 
 ---
 
-## 🧱 Data Modeling
+## The Solution
 
-A star schema approach was implemented to ensure analytical performance and scalability.
+A modern **Medallion Architecture** data platform built on Databricks and Delta Lake, delivering clean, governed, BI-ready data to a Power BI executive dashboard.
 
-### Fact Tables
-- fact_sales
-- fact_returns
-
-### Dimension Tables
-- dim_product
-- dim_customer
-- dim_category
-- dim_date
-
-This structure enables:
-
-- Efficient slicing and filtering  
-- Scalable BI reporting  
-- Clear separation of business entities  
-- Optimized aggregation performance  
+```
+Raw CSV exports
+      │
+      ▼
+┌─────────────┐
+│   BRONZE    │  Raw ingestion → Delta tables. Schema enforcement.
+│             │  Immutable source of truth.
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│   SILVER    │  Cleaning, validation, joins, business logic.
+│             │  Structured analytical model (Star Schema).
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│    GOLD     │  Aggregated KPIs, performance metrics.
+│             │  Optimised for direct BI consumption.
+└──────┬──────┘
+       │
+       ▼
+  Power BI Dashboard — Executive reporting layer
+```
 
 ---
 
-## 📊 Implemented Business KPIs
+## Data Model (Star Schema)
 
-### Revenue & Profitability
-- Total Revenue  
-- Gross Margin  
-- Gross Margin %  
-- Revenue by Category  
-- Revenue Trends (Daily / Monthly)
+| Table | Type | Description |
+|---|---|---|
+| `fact_sales` | Fact | Transactional sales records |
+| `fact_returns` | Fact | Return events with reason codes |
+| `dim_product` | Dimension | Product attributes, category, pricing |
+| `dim_customer` | Dimension | Customer segments, tiers |
+| `dim_category` | Dimension | Category hierarchy |
+| `dim_date` | Dimension | Full calendar table with fiscal periods |
+
+---
+
+## KPIs Delivered
+
+### Revenue & Margin
+- Total Revenue, Gross Margin, Gross Margin %
+- Revenue trend by day / month
+- Revenue by product category
 
 ### Product Performance
-- Top Performing Products  
-- Pareto Analysis (Top 20% Revenue Contributors)  
-- Category Performance Ranking  
+- Top revenue-generating SKUs
+- **Pareto analysis** — which 20% of products drive 80% of revenue
+- Category performance ranking
 
-### Customer Insights
-- Revenue by Customer  
-- Customer Ranking  
-- Customer Contribution Analysis  
+### Returns Intelligence
+- **Return Rate by product and category** — identifying loss leaders
+- Return trend over time
+- High-risk product flagging
 
-### Returns Monitoring
-- Return Rate  
-- Product Return Risk  
-- Category Return Analysis  
-
----
-
-## 📈 Power BI Dashboard
-
-The final layer of the project is an interactive executive dashboard built in Power BI.
-
-The dashboard enables:
-
-- Revenue trend analysis  
-- Margin monitoring  
-- Product performance insights  
-- Return rate tracking  
-- Drill-down capability by category and customer  
+### Customer Analytics
+- Revenue by customer, customer ranking
+- Customer tier contribution analysis
 
 ---
 
-## ⚙️ Technology Stack
+## Power BI Dashboard
 
-- Databricks  
-- PySpark  
-- Spark SQL  
-- Delta Lake  
-- Medallion Architecture  
-- Star Schema Modeling  
-- Power BI  
+The Gold layer feeds directly into an interactive executive dashboard enabling:
+- Revenue trend drill-down by period and category
+- Gross margin monitoring with threshold alerts
+- Return rate tracking with product-level detail
+- Top customer and top product views side-by-side
 
 ---
 
-## 🔄 Scalability & Extensibility
+## Why Medallion Architecture?
 
-The architecture is designed to support:
+Most analytics projects dump everything into one notebook. Medallion separates concerns deliberately:
 
-- Incremental data loading  
-- Partitioned Delta tables  
-- Streaming ingestion  
-- Expansion to additional fact tables  
-- Cloud deployment (Azure / AWS Databricks)  
+- **Bronze** is immutable — you can always reprocess from source
+- **Silver** is your governed, clean layer — one definition of "clean customer" across the org
+- **Gold** is optimised for speed — aggregations pre-built so dashboards don't timeout
 
----
-
-## 💼 Business Impact Simulation
-
-Although this is a portfolio project, it reflects a real enterprise scenario where:
-
-- KPI definitions are standardized  
-- Reporting time is reduced  
-- Data silos are eliminated  
-- Executive visibility is improved  
-- Decision-making becomes data-driven  
+This matters at scale. It also mirrors how modern data teams at companies like Zalando, Allegro, and ING actually structure their platforms.
 
 ---
 
-## 🧠 Key Competencies Demonstrated
+## Tech Stack
 
-- End-to-end data platform design  
-- Medallion Architecture implementation  
-- Data modeling (Star Schema)  
-- Business KPI definition  
-- PySpark transformations  
-- SQL aggregations  
-- BI data preparation  
-- Executive dashboard design  
+| Layer | Technology |
+|---|---|
+| Compute & orchestration | Databricks |
+| Storage format | Delta Lake |
+| Transformation | PySpark, Spark SQL |
+| Data modeling | Star Schema |
+| Visualisation | Power BI |
+| Architecture pattern | Medallion (Bronze / Silver / Gold) |
 
 ---
 
-## 📌 Why This Project Matters
+## Repository Structure
 
-This project demonstrates the ability to:
+```
+├── databricks/
+│   ├── bronze/          # Raw ingestion notebooks
+│   ├── silver/          # Cleaning & transformation logic
+│   └── gold/            # KPI aggregation layer
+├── data/                # Sample source files
+└── powerbi/             # Dashboard file (.pbix)
+```
 
-- Think beyond notebooks  
-- Design scalable analytical systems  
-- Translate business problems into technical solutions  
-- Deliver clean, BI-ready datasets  
-- Own the full analytics lifecycle  
+---
+
+## Scalability Notes
+
+The platform is designed to extend without rebuilding:
+- **Incremental loads** — Delta Lake handles upserts natively (MERGE)
+- **Partitioned tables** — date-partitioned for query performance at scale
+- **Cloud-ready** — architecture maps directly to Azure Databricks or AWS
+- **New data sources** — additional Bronze tables slot in without touching Silver/Gold
+
+---
+
+*Built by Bartosz Majka · [LinkedIn](https://www.linkedin.com/in/bartosz-majka-a8088a35a/)*
